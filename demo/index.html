@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Demo</title>
+	<style>
+		.leave {
+			position: absolute;
+			display: none;
+			top: 15px;
+			left: 50%;
+			padding: 15px;
+			transform: translate(-50%, 0);
+			-ms-transform: translate(-50%, 0);
+			background: red;
+			z-index: 99;
+		}
+
+		.leave.in {
+			display: none;
+		}
+
+		.leave.out {
+			display: block;
+		}
+
+	</style>
+</head>
+<body ng-app="testApp">
+<div class="leave" window-leave dismiss-on-enter="false">
+	Some text here {{$rootScope}}
+	<button ng-click="dismiss()">Dismiss</button>
+</div>
+
+<script src="js/angular.min.js"></script>
+<script src="js/app.js"></script>
+<script src="../window-leave.js"></script>
+</body>
+</html>

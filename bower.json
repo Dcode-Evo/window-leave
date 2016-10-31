@@ -1,0 +1,24 @@
+{
+  "name": "window-leave",
+  "description": "Show a message when the user leaves the page",
+  "main": "./window-leave.js",
+  "version": "1.0.0",
+  "authors": [
+    "Aleksei Polechin (http://alek.be)"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Dcode-Evo/window-leave",
+  "private": true,
+  "dependencies": {
+    "angular": "1.5.8"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    ".gitignore",
+    "test",
+    "tests",
+    "demo"
+  ]
+}
