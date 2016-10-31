@@ -15,7 +15,6 @@
 				},
 				controller: function ($scope, $element, $attrs) {
 					$scope.direction = "";
-					$scope.leaveTimer = null;
 					$scope.displayed = false;
 
 					$scope.config = {
@@ -44,39 +43,16 @@
 						$document.on('mouseenter', userReturns);
 						$document.on('mouseleave', userLeaves);
 					}
+					// add listeners
+					onMouse();
 
-					// JS method to check if the document is focused
-					if (document.hasFocus()) {
-						onMouse();
-					}
-
-
-					// add focus/blur events listeners
-					var win = angular.element($window);
-
-					win.on("blur", windowBlur)
-						.on("focus", windowFocus);
 					// When the scope is destroyed, we have to make sure to teardown
 					// the event binding so we don't get a leak.
 					$scope.$on("$destroy", handleDestroy);
 
-					// I handle the blur event on the Window.
-					function windowBlur(event) {
-						offMouse();
-						userLeaves(event);
-					}
-
-					// I handle the focus event on the Window.
-					function windowFocus(event) {
-						onMouse();
-						userReturns();
-					}
-
 					// I teardown the directive.
 					// fires when the scope of the directive is destroyed
 					function handleDestroy() {
-						win.off("blur", windowBlur);
-						win.off("focus", windowFocus);
 						offMouse();
 					}
 
@@ -107,11 +83,13 @@
 						$scope.direction = direction;
 					}
 
+					var leaveTimer;
+
 					function userLeaves(event) {
 						getLeaveSide(event);
 
 						if (!$scope.displayed) {
-							$scope.leaveTimer = setTimeout(function () {
+							leaveTimer = setTimeout(function () {
 								$element.addClass($scope.config.outClass)
 									.removeClass($scope.config.inClass)
 									.addClass($scope.direction);
@@ -120,9 +98,9 @@
 						}
 					}
 
-					function userReturns() {
-						if ($scope.leaveTimer) {
-							clearTimeout($scope.leaveTimer);
+					function userReturns(event) {
+						if (leaveTimer && document.hasFocus()) {
+							clearTimeout(leaveTimer);
 						}
 						if ($scope.displayed && $scope.dismissOnEnter) {
 							$scope.dismiss();
