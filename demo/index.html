@@ -4,32 +4,82 @@
 	<meta charset="UTF-8">
 	<title>Demo</title>
 	<style>
-		.leave {
-			position: absolute;
-			display: none;
-			top: 15px;
-			left: 50%;
-			padding: 15px;
-			transform: translate(-50%, 0);
-			-ms-transform: translate(-50%, 0);
-			background: red;
+		.user-leave-container {
+			position: fixed;
+			width: 100%;
+			height: 300px;
+			top: 0;
+			left: 0;
 			z-index: 99;
+			transform: translate(0, -100%);
+			transition: all .3s;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a6000000', endColorstr='#00000000', GradientType=0); /* IE6-9 */
 		}
 
-		.leave.in {
-			display: none;
-		}
-
-		.leave.out {
+		.user-leave-container:before {
+			position: absolute;
 			display: block;
+			content: '';
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			pointer-events: none;
+			background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 100%);
+			background-image: -o-linear-gradient(top, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 100%);
+			background-image: linear-gradient(to bottom, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0) 100%);
+			background-repeat: repeat-x;
+		}
+
+		.user-leave-container.in {
+		}
+
+		.user-leave-container.out {
+			transform: translate(0, 0);
+			transition: transform .4s;
+		}
+
+		.user-leave-container.out .user-leave-box {
+			transform: translate(-50%, 0);
+		}
+
+		.user-leave-box {
+			position: absolute;
+			top: 35px;
+			left: 50%;
+			width: 330px;
+			height: 70px;
+			padding: 10px;
+			border-radius: 6px;
+			transform: translate(-50%, 0);
+			background-color: #FFFFFF;
+			z-index: 1;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
 		}
 
 	</style>
 </head>
 <body ng-app="testApp">
-<div class="leave" window-leave dismiss-on-enter="false">
-	Some text here
-	<button ng-click="dismiss()">Dismiss</button>
+
+<label for="enabled">
+	Enabled <input type="checkbox" name="enable" id="enabled" ng-model="enable">
+</label>
+
+<div class="user-leave-container"
+	 window-leave
+	 delay="0"
+	 dismiss-on="outsideBox"
+	 box=".user-leave-box"
+	 dismiss-delay="4000"
+>
+	<div class="user-leave-box">
+		<h4>You leave?
+			<span>sdfsdfsdf</span>
+			<button class="btn btn-link" ng-click="console.log('coucou'); dismiss()">
+				Dismiss
+			</button>
+		</h4>
+	</div>
 </div>
 
 <script src="js/angular.min.js"></script>
