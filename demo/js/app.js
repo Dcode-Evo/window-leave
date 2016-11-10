@@ -14,6 +14,9 @@ var app;
 
 	app = angular.module('testApp', [
 		'windowLeave'
-	]);
+	])
+		.run(function($rootScope){
+			$rootScope.enable = true;
+		});
 
 })(window, window.angular);
