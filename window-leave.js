@@ -53,12 +53,10 @@
 					$scope.$watch('enable', function (value) {
 						// if value is defined as false
 						if (value === false) {
-							console.log("disabled");
 							offMouse();
 						}
 						// if value is undifined or is true
 						else if (!value || value === true) {
-							console.log("enabled");
 							onMouse();
 						}
 					});
