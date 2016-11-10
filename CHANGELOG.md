@@ -1,3 +1,6 @@
+## 1.2.1
+- remove console.log
+
 ## 1.2.0
 - add some new dismiss methods `dismiss-on` to define how to dismiss on mouse back
  
