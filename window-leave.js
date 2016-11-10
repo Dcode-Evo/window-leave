@@ -8,17 +8,22 @@
 				restrict: 'A',
 				transclude: true,
 				scope: {
-					"delay": "=",
+					"delay": "=?",
 					"outClass": "=",
 					"inClass": "=",
-					"dismissOnEnter": "="
+					"enable": "=?",
+					"dismissOn": "@",
+					"dismissDelay": "=?",
+					"box": "@"
 				},
 				controller: function ($scope, $element, $attrs) {
 					$scope.direction = "";
 					$scope.displayed = false;
+					$scope.dismissOn = !$scope.dismissOn ? "mouseenter" : $scope.dismissOn;
 
 					$scope.config = {
-						delay: $scope.delay || 2000,
+						delay: $scope.delay === 0 ? 0 : $scope.delay || 2000,
+						dismissDelay: $scope.dismissDelay === 0 ? 0 : $scope.dismissDelay || 2000,
 						outClass: $scope.outClass || "out",
 						inClass: $scope.inClass || 'in'
 					};
@@ -43,8 +48,20 @@
 						$document.on('mouseenter', userReturns);
 						$document.on('mouseleave', userLeaves);
 					}
-					// add listeners
-					onMouse();
+
+					// add watcher on the enable value
+					$scope.$watch('enable', function (value) {
+						// if value is defined as false
+						if (value === false) {
+							console.log("disabled");
+							offMouse();
+						}
+						// if value is undifined or is true
+						else if (!value || value === true) {
+							console.log("enabled");
+							onMouse();
+						}
+					});
 
 					// When the scope is destroyed, we have to make sure to teardown
 					// the event binding so we don't get a leak.
@@ -84,9 +101,14 @@
 					}
 
 					var leaveTimer;
+					var dismissTimer;
 
 					function userLeaves(event) {
 						getLeaveSide(event);
+
+						if (dismissTimer) {
+							clearTimeout(dismissTimer);
+						}
 
 						if (!$scope.displayed) {
 							leaveTimer = setTimeout(function () {
@@ -102,14 +124,55 @@
 						if (leaveTimer && document.hasFocus()) {
 							clearTimeout(leaveTimer);
 						}
-						if ($scope.displayed && $scope.dismissOnEnter) {
+						if ($scope.displayed) {
+							switch ($scope.dismissOn) {
+								case "click":
+									// dismisses on click everywhere
+									// and prevent default actions of elements
+									$document.on('click', function (e) {
+										$scope.dismiss();
+										$document.off('click');
+									});
+
+									break;
+								case "outsideBox":
+									dismissAfter($scope.dismissDelay);
+									$scope.config.box.on('mouseleave', dismissAfter);
+									$scope.config.box.on('mouseenter', cancelDismiss);
+									break;
+
+								case "mouseenter":
+									$scope.dismiss();
+									break;
+
+								case "none":
+									break;
+							}
+						}
+					}
+
+					// init the dismiss timer
+					function dismissAfter() {
+						if (dismissTimer) {
+							clearTimeout(dismissTimer);
+						}
+						dismissTimer = setTimeout(function () {
 							$scope.dismiss();
+						}, $scope.config.dismissDelay);
+					}
+
+					// remove dismiss timer
+					function cancelDismiss() {
+						if (dismissTimer) {
+							clearTimeout(dismissTimer);
 						}
 					}
 				},
 				link: function ($scope, $element, $attrs, $ctrl, transclude) {
 					transclude($scope.$new(), function (clone) {
 						$element.append(clone);
+
+						$scope.config.box = $scope.box ? angular.element($element[0].querySelector($scope.box)) : null;
 					});
 				}
 			}
