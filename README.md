@@ -10,7 +10,7 @@ bower install https://github.com/Dcode-Evo/window-leave.git --save-dev
 
 ```js
 app = angular.module('testApp', [
-	'imgAnimator'
+	'windowLeave'
 ]);
 ```
 
