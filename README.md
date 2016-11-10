@@ -19,7 +19,7 @@ app = angular.module('testApp', [
 ```html
 <body ng-app="testApp">
 	...
-	<div class="leave" window-leave dismiss-on-enter="false">
+	<div class="leave" window-leave dismiss-on="none">
 		Some text here
 		<button ng-click="dismiss()">Dismiss</button>
 	</div>
@@ -29,8 +29,14 @@ app = angular.module('testApp', [
 ```
 
 ## Attributes (Parameters)
-- **dismiss-on-enter**: {bool}, dissmis the message on mouseenter or window focus
-	- default: false, if not specified
+- **enable**: {boolean}
+- **dismiss-on**: {string}, dissmis the message
+	- "mouseenter": default if not specified, dismiss when mouse enters the page
+	- "outsideBox": when mouse is back and is not in the message box
+		- use `box` attribute to specify the box element (class, id), default is the directive's element
+	- "click": dismiss on click anywhere, prevents the default actions of links, needs workaround
+	- "none": disable auto dismiss
+- **dismiss-delay**: define the time to wait before dismiss when "outsideBox"
 - **delay**: {int} milliseconds, the tme after which the message will be shown
 	- default (2000)
 - **in-class**: the class to add when the user is back in the window/document (default: `in`)
