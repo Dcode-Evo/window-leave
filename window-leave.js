@@ -14,7 +14,9 @@
 					"enable": "=?",
 					"dismissOn": "@",
 					"dismissDelay": "=?",
-					"box": "@"
+					"box": "@",
+					"opened": "=",
+					"onOpen": "&"
 				},
 				controller: function ($scope, $element, $attrs) {
 					$scope.direction = "";
@@ -26,14 +28,6 @@
 						dismissDelay: $scope.dismissDelay === 0 ? 0 : $scope.dismissDelay || 2000,
 						outClass: $scope.outClass || "out",
 						inClass: $scope.inClass || 'in'
-					};
-
-					// public method, accesible inside the directive element
-					$scope.dismiss = function () {
-						$element.addClass($scope.config.inClass)
-							.removeClass($scope.config.outClass)
-							.removeClass($scope.direction);
-						$scope.displayed = false;
 					};
 
 					// disable mouse events, used when the windows is unfocused
@@ -109,12 +103,7 @@
 						}
 
 						if (!$scope.displayed) {
-							leaveTimer = setTimeout(function () {
-								$element.addClass($scope.config.outClass)
-									.removeClass($scope.config.inClass)
-									.addClass($scope.direction);
-								$scope.displayed = true;
-							}, $scope.config.delay);
+							leaveTimer = setTimeout(open, $scope.config.delay);
 						}
 					}
 
@@ -128,7 +117,7 @@
 									// dismisses on click everywhere
 									// and prevent default actions of elements
 									$document.on('click', function (e) {
-										$scope.dismiss();
+										dismiss();
 										$document.off('click');
 									});
 
@@ -140,7 +129,7 @@
 									break;
 
 								case "mouseenter":
-									$scope.dismiss();
+									dismiss();
 									break;
 
 								case "none":
@@ -149,13 +138,38 @@
 						}
 					}
 
+					// public method, accesible inside the directive element
+					$scope.dismiss = dismiss;
+
+					function open() {
+						$element.addClass($scope.config.outClass)
+							.removeClass($scope.config.inClass)
+							.addClass($scope.direction);
+						$scope.displayed = true;
+
+						if(typeof $scope.onOpen !== "undefined"){
+							$scope.onOpen();
+						}
+
+						$scope.opened = true;
+						$scope.$apply();
+					}
+
+					function dismiss() {
+						$element.addClass($scope.config.inClass)
+							.removeClass($scope.config.outClass)
+							.removeClass($scope.direction);
+						$scope.displayed = false;
+						$scope.opened = false;
+					}
+
 					// init the dismiss timer
 					function dismissAfter() {
 						if (dismissTimer) {
 							clearTimeout(dismissTimer);
 						}
 						dismissTimer = setTimeout(function () {
-							$scope.dismiss();
+							dismiss();
 						}, $scope.config.dismissDelay);
 					}
 

@@ -1,3 +1,6 @@
+## 1.2.2
+- add an attribute to bind a var to be available outside the directive (opened)
+
 ## 1.2.1
 - remove console.log
 
