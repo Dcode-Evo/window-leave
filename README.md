@@ -41,6 +41,8 @@ app = angular.module('testApp', [
 	- default (2000)
 - **in-class**: the class to add when the user is back in the window/document (default: `in`)
 - **out-class**: the class to add when the user leaves the window/document (default: `out`)
+- **opened**: status of the module true/false accessible to the external scope
+- **on-open**: provide a function to execute on box display
 
 ## Methods
 

@@ -59,7 +59,7 @@
 
 	</style>
 </head>
-<body ng-app="testApp">
+<body ng-app="testApp" ng-controller="testCtrl">
 
 <label for="enabled">
 	Enabled <input type="checkbox" name="enable" id="enabled" ng-model="enable">
@@ -71,6 +71,9 @@
 	 dismiss-on="outsideBox"
 	 box=".user-leave-box"
 	 dismiss-delay="4000"
+	 enable="enable"
+	 opened="leaveOpened"
+	 on-open="makeSomething()"
 >
 	<div class="user-leave-box">
 		<h4>You leave?
@@ -81,6 +84,9 @@
 		</h4>
 	</div>
 </div>
+<pre>
+opened:{{leaveOpened}}
+</pre>
 
 <script src="js/angular.min.js"></script>
 <script src="js/app.js"></script>
