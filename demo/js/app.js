@@ -13,10 +13,24 @@ var app;
 	'use strict';
 
 	app = angular.module('testApp', [
-		'windowLeave'
-	])
-		.run(function($rootScope){
-			$rootScope.enable = true;
-		});
+			'windowLeave'
+		])
+		.controller('testCtrl', [
+			'$scope',
+			function ($scope, windowLeaveService) {
+
+				$scope.leaveOpened = false;
+				$scope.enable = true;
+
+				$scope.$watch('leaveOpened', function (value) {
+					console.log(value);
+					$scope.leaveOpened = value;
+				});
+
+				$scope.makeSomething = function(){
+					console.log('Hello');
+				}
+			}]
+		);
 
 })(window, window.angular);
