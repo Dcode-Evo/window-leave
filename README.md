@@ -37,6 +37,9 @@ app = angular.module('testApp', [
 	- "click": dismiss on click anywhere, prevents the default actions of links, needs workaround
 	- "none": disable auto dismiss
 - **dismiss-delay**: define the time to wait before dismiss when "outsideBox"
+- **leave-direction**: {string} define the side of the window when the box should trigger
+	- 'top' | 'left' | 'right' | 'bottom'
+	- if not set the box will always trigger on window leave, even alt+tab
 - **delay**: {int} milliseconds, the tme after which the message will be shown
 	- default (2000)
 - **in-class**: the class to add when the user is back in the window/document (default: `in`)
