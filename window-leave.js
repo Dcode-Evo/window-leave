@@ -163,7 +163,12 @@
 						$scope.$apply();
 					}
 
-					function dismiss() {
+					function dismiss(method) {
+						switch (method){
+							case 'disable':
+								$scope.enable = false;
+								break;
+						}
 						$element.addClass($scope.config.inClass)
 							.removeClass($scope.config.outClass)
 							.removeClass("top bottom right left blur");
