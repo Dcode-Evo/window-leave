@@ -14,6 +14,7 @@
 					"enable": "=?",
 					"dismissOn": "@",
 					"dismissDelay": "=?",
+					"leaveDirection": "@?", // 'top' | 'left' | 'right' | 'bottom' | undefined
 					"box": "@",
 					"opened": "=",
 					"onOpen": "&"
@@ -66,37 +67,44 @@
 					}
 
 					function getLeaveSide(event) {
+						var direction = [];
+
 						if (event.type === "blur") {
-							$scope.direction = "blur";
+							direction.push("blur");
 							return;
 						}
 
 						var vWidth = $window.innerWidth,
-							vHeight = $window.innerHeight,
-							direction = '';
+							vHeight = $window.innerHeight;
 
-						if (event.clientX > (vWidth / 2) + (vWidth / 4)) {
-							direction += "right ";
+						if (event.clientX > (vWidth - 10)) {
+							direction.push("right");
 						}
-						else if (event.clientX < (vWidth / 2) - (vWidth / 4)) {
-							direction += "left ";
-						}
-
-						if (event.clientY > (vHeight / 2) + (vHeight / 4)) {
-							direction += "bottom ";
-						}
-						else if (event.clientY < (vHeight / 2) - (vHeight / 4)) {
-							direction += "top ";
+						else if (event.clientX < 10) {
+							direction.push("left");
 						}
 
-						$scope.direction = direction;
+						if (event.clientY > (vHeight - 10)) {
+							direction.push("bottom");
+						}
+						else if (event.clientY < 10) {
+							direction.push("top");
+						}
+
+						return direction;
 					}
 
 					var leaveTimer;
 					var dismissTimer;
 
 					function userLeaves(event) {
-						getLeaveSide(event);
+						$scope.direction = getLeaveSide(event);
+
+						// if leave-direction is defined and if the provided value does not match the cursor leave direction
+						// do not show the box
+						if ($scope.leaveDirection && $scope.direction.indexOf($scope.leaveDirection) === -1) {
+							return;
+						}
 
 						if (dismissTimer) {
 							clearTimeout(dismissTimer);
@@ -144,10 +152,10 @@
 					function open() {
 						$element.addClass($scope.config.outClass)
 							.removeClass($scope.config.inClass)
-							.addClass($scope.direction);
+							.addClass($scope.direction.join(' '));
 						$scope.displayed = true;
 
-						if(typeof $scope.onOpen !== "undefined"){
+						if (typeof $scope.onOpen !== "undefined") {
 							$scope.onOpen();
 						}
 
@@ -155,10 +163,15 @@
 						$scope.$apply();
 					}
 
-					function dismiss() {
+					function dismiss(method) {
+						switch (method){
+							case 'disable':
+								$scope.enable = false;
+								break;
+						}
 						$element.addClass($scope.config.inClass)
 							.removeClass($scope.config.outClass)
-							.removeClass($scope.direction);
+							.removeClass("top bottom right left blur");
 						$scope.displayed = false;
 						$scope.opened = false;
 					}

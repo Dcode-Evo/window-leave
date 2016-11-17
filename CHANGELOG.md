@@ -1,3 +1,8 @@
+## 1.3.0
+- dismiss('disable') will disable the box on dismiss. So it will not show anymore till reload
+- add attribute to configure on which side leave should trigger
+- better leave direction management. (and classes on element)
+
 ## 1.2.2
 - add an attribute to bind a var to be available outside the directive (opened)
 
