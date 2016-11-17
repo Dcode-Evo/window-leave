@@ -20,7 +20,7 @@
 					"onOpen": "&"
 				},
 				controller: function ($scope, $element, $attrs) {
-					$scope.direction = "";
+					$scope.disabledByUser = false;
 					$scope.displayed = false;
 					$scope.dismissOn = !$scope.dismissOn ? "mouseenter" : $scope.dismissOn;
 
@@ -39,6 +39,9 @@
 
 					// enable mouse events when the windows is focused
 					function onMouse() {
+						if($scope.disabledByUser){
+							return;
+						}
 						// Event listeners on $document
 						$document.on('mouseenter', userReturns);
 						$document.on('mouseleave', userLeaves);
@@ -167,6 +170,8 @@
 						switch (method){
 							case 'disable':
 								$scope.enable = false;
+								$scope.disabledByUser = true;
+								offMouse();
 								break;
 						}
 						$element.addClass($scope.config.inClass)
