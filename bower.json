@@ -2,7 +2,7 @@
   "name": "window-leave",
   "description": "Show a message when the user leaves the page",
   "main": "./window-leave.js",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "authors": [
     "Aleksei Polechin (http://alek.be)"
   ],
