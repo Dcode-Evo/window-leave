@@ -3,7 +3,7 @@
 (function (window, angular, undefined) {
 
 	angular.module('windowLeave', [])
-		.directive('windowLeave', ['$window', '$document', function ($window, $document) {
+		.directive('windowLeave', ['$window', '$document', '$timeout', function ($window, $document, $timeout) {
 			return {
 				restrict: 'A',
 				transclude: true,
@@ -110,17 +110,17 @@
 						}
 
 						if (dismissTimer) {
-							clearTimeout(dismissTimer);
+							$timeout.cancel(dismissTimer);
 						}
 
 						if (!$scope.displayed) {
-							leaveTimer = setTimeout(open, $scope.config.delay);
+							leaveTimer = $timeout(open, $scope.config.delay);
 						}
 					}
 
 					function userReturns(event) {
 						if (leaveTimer && document.hasFocus()) {
-							clearTimeout(leaveTimer);
+							$timeout.cancel(leaveTimer);
 						}
 						if ($scope.displayed) {
 							switch ($scope.dismissOn) {
@@ -184,9 +184,9 @@
 					// init the dismiss timer
 					function dismissAfter() {
 						if (dismissTimer) {
-							clearTimeout(dismissTimer);
+							$timeout.cancel(dismissTimer);
 						}
-						dismissTimer = setTimeout(function () {
+						dismissTimer = $timeout(function () {
 							dismiss();
 						}, $scope.config.dismissDelay);
 					}
@@ -194,7 +194,7 @@
 					// remove dismiss timer
 					function cancelDismiss() {
 						if (dismissTimer) {
-							clearTimeout(dismissTimer);
+							$timeout.cancel(dismissTimer);
 						}
 					}
 				},

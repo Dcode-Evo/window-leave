@@ -1,3 +1,6 @@
+## 1.3.2
+- replace setTimeout/clearTimeout by the angular $timeout
+
 ## 1.3.1
 - add a variable to know if it was dismissed and disabled by the user 
 - remove mouse listener when disabled by user
