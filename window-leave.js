@@ -19,7 +19,7 @@
 					"opened": "=",
 					"onOpen": "&"
 				},
-				controller: function ($scope, $element, $attrs) {
+				controller: ['$scope', '$element', function ($scope, $element, $attrs) {
 					$scope.disabledByUser = false;
 					$scope.displayed = false;
 					$scope.dismissOn = !$scope.dismissOn ? "mouseenter" : $scope.dismissOn;
@@ -197,7 +197,7 @@
 							$timeout.cancel(dismissTimer);
 						}
 					}
-				},
+				}],
 				link: function ($scope, $element, $attrs, $ctrl, transclude) {
 					transclude($scope.$new(), function (clone) {
 						$element.append(clone);
